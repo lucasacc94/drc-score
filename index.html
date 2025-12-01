@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Calcolatore DRC Score</title>
+  <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+  --font-main: 'Berkeley Mono', monospace;
+  --main-green: #42544B;
+  --panna: #FCFAF0;
+}
+body {
+  font-family: var(--font-main), monospace;
+  background: var(--panna);
+  color: var(--main-green);
+  max-width: 950px;
+  margin: 2em auto;
+}
+h2 {
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 1.2em;
+  letter-spacing: 0.02em;
+}
+form {
+  background: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.15em;
+  margin-bottom: 1em;
+}
+.row-names, .row-fields {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.1em;
+  width: 100%;
+}
+.input-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 120px;
+}
+.input-label {
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 0.08em;
+  font-size: 0.97em;
+  color: var(--main-green);
+}
+.name-input {
+  width: 140px;
+  max-width: 140px;
+  font-size: 1em;
+  border-radius: 6px;
+  background: #fff;
+  color: var(--main-green);
+  border: 1px solid #b1bfa7;
+  padding: 0.38em;
+  box-sizing: border-box;
+  font-family: var(--font-main), monospace;
+}
+.field-input {
+  width: 88px;
+  max-width: 98px;
+  font-size: 1em;
+  border-radius: 5px;
+  background: #fff;
+  color: var(--main-green);
+  border: 1px solid #b1bfa7;
+  text-align: center;
+  padding: 0.32em 0.15em;
+  box-sizing: border-box;
+  font-family: var(--font-main), monospace;
+}
+.checkbox-section {
+  margin-top: 1.2em;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.60em 1.2em;
+  width: 100%;
+  max-width: 880px;
+  background: none;
+}
+.checkbox-pair {
+  display: flex;
+  align-items: center;
+  gap: 0.28em;
+  margin-bottom: 0.12em;
+}
+.custom-checkbox {
+  width: 24px;
+  height: 24px;
+  accent-color: var(--main-green);
+  margin-right: 0.42em;
+  vertical-align: middle;
+  display: inline-block;
+}
+.checkbox-desc {
+  font-weight: 700;
+  color: var(--main-green);
+  display: inline;
+  font-size: 1.02em;
+}
+.checkbox-desc span {
+  font-weight: 400;
+  color: var(--main-green);
+  opacity: 0.82;
+  margin-left: 0.11em;
+  font-size: 0.93em;
+}
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+  margin-top: 1em;
+  width: 100%;
+}
+button {
+  padding: 0.51em 1.3em;
+  background-color: var(--main-green);
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  font-family: var(--font-main), monospace;
+  font-weight: 700;
+  font-size: 1em;
+  letter-spacing: 0.02em;
+  transition: background-color 0.15s;
+}
+button:hover { background-color: #27322c; }
+.result {
+  margin: 1.5em auto 0 auto;
+  font-weight: bold;
+  font-size: 1.07em;
+  display: flex;
+  gap: 1em;
+  max-width: 600px;
+  color: var(--main-green);
+  justify-content: center;
+  font-family: var(--font-main), monospace;
+  align-items: center;
+}
+.result label {
+  flex-shrink: 0;
+  width: 105px;
+  text-align: right;
+  padding-right: 0.5em;
+}
+.result input {
+  flex-grow: 1;
+  padding: 0.39em;
+  background: #fff;
+  border-radius: 5px;
+  border: 1px solid #b1bfa7;
+  font-weight: normal;
+  font-family: var(--font-main), monospace;
+  text-align: center;
+  color: var(--main-green);
+  min-width: 180px;
+  max-width: 220px;
+}
+/* Phenotype color classes */
+.phenotype-hs {
+  background-color: #dc3545;
+  color: #fff;
+}
+.phenotype-ms {
+  background-color: #fd7e14;
+  color: #fff;
+}
+.phenotype-ls {
+  background-color: #198754;
+  color: #fff;
+}
+  </style>
+</head>
+<body>
+<h2>Calcolatore DRC Score</h2>
+<form id="drcForm" onsubmit="event.preventDefault(); calcolaDRC();">
+  <div class="row-names">
+    <div class="input-group">
+      <label for="lastName" class="input-label">Last Name</label>
+      <input type="text" id="lastName" name="lastName" class="name-input" />
+    </div>
+    <div class="input-group">
+      <label for="firstName" class="input-label">First Name</label>
+      <input type="text" id="firstName" name="firstName" class="name-input" />
+    </div>
+  </div>
+  <div class="row-fields">
+    <div class="input-group">
+      <label for="age" class="input-label">Age</label>
+      <input type="number" id="age" min="20" max="150" class="field-input" required />
+    </div>
+    <div class="input-group">
+      <label for="sex" class="input-label">Sex</label>
+      <select id="sex" required class="field-input">
+        <option value="">--</option>
+        <option value="M">M</option>
+        <option value="F">F</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label for="diabetesDuration" class="input-label">Diabetes Duration</label>
+      <input type="number" id="diabetesDuration" min="0" max="100" class="field-input" required />
+    </div>
+    <div class="input-group">
+      <label for="creatinin" class="input-label">Creatinin</label>
+      <input type="number" id="creatinin" min="0" max="25.99" step="0.01" class="field-input" required />
+    </div>
+    <div class="input-group">
+      <label for="uacr" class="input-label">uACR (mg/g)</label>
+      <input type="number" id="uacr" min="0" max="10000.99" step="0.01" class="field-input" required />
+    </div>
+  </div>
+  <div class="checkbox-section">
+    <div class="checkbox-pair">
+      <input type="checkbox" id="overtCardio" class="custom-checkbox" title="AMI, ACS, ACBG, PCI" />
+      <label for="overtCardio" class="checkbox-desc">Overt Cardiac Disease</label>
+    </div>
+    <div class="checkbox-pair">
+      <input type="checkbox" id="subclinicalCardio" class="custom-checkbox" title="positive stress test, evidence of ASCVD" />
+      <label for="subclinicalCardio" class="checkbox-desc">SubClinical Cardiac Disease</label>
+    </div>
+    <div class="checkbox-pair">
+      <input type="checkbox" id="overtCerebro" class="custom-checkbox" title="Stroke, Carotid Revascularization, TIA" />
+      <label for="overtCerebro" class="checkbox-desc">Overt Cerebrovascular Disease</label>
+    </div>
+    <div class="checkbox-pair">
+      <input type="checkbox" id="subclinicalCerebro" class="custom-checkbox" title="Carotid plaque ≥ 2mm and/or Stenosis > 30%" />
+      <label for="subclinicalCerebro" class="checkbox-desc">Subclinical Cerebrovascular Disease</label>
+    </div>
+    <div class="checkbox-pair">
+      <input type="checkbox" id="overtPeripheral" class="custom-checkbox" title="Major Amputation, Peripheral Revascularization" />
+      <label for="overtPeripheral" class="checkbox-desc">Overt Peripheral Artery Disease</label>
+    </div>
+    <div class="checkbox-pair">
+      <input type="checkbox" id="subclinicalPeripheral" class="custom-checkbox" title="ABI &lt; 0.9" />
+      <label for="subclinicalPeripheral" class="checkbox-desc">Subclinical Peripheral Artery Disease</label>
+    </div>
+    <div class="checkbox-pair">
+      <input type="checkbox" id="overtRetinopathy" class="custom-checkbox" title="Proliferative Retinopathy or Treatment for DR" />
+      <label for="overtRetinopathy" class="checkbox-desc">Overt Diabetic Retinopathy</label>
+    </div>
+    <div class="checkbox-pair">
+      <input type="checkbox" id="subclinicalRetinopathy" class="custom-checkbox" title="Background Retinopathy" />
+      <label for="subclinicalRetinopathy" class="checkbox-desc">Subclinical Diabetic Retinopathy</label>
+    </div>
+    <div class="checkbox-pair">
+      <input type="checkbox" id="overtDPN" class="custom-checkbox" title="MNSI > 4.01" />
+      <label for="overtDPN" class="checkbox-desc">Overt DPN</label>
+    </div>
+    <div class="checkbox-pair">
+      <input type="checkbox" id="subclinicalDPN" class="custom-checkbox" title="MNSI 2.5 - 4" />
+      <label for="subclinicalDPN" class="checkbox-desc">Subclinical DPN</label>
+    </div>
+  </div>
+  <div class="buttons">
+    <button type="submit">Calcola DRC Score</button>
+    <button type="button" onclick="stampaReport()">Print Report</button>
+    <button type="button" onclick="azzeraForm()">Clear</button>
+  </div>
+</form>
+<div class="result">
+  <label for="drcScore">DRC Score</label>
+  <input type="text" id="drcScore" readonly aria-readonly="true" />
+</div>
+<div class="result">
+  <label for="phenotype">Phenotype</label>
+  <input type="text" id="phenotype" readonly aria-readonly="true" />
+</div>
+<script>
+  function calcolaEGFR(creatininemia, età, sesso) {
+    const k = (sesso === 'F') ? 0.7 : 0.9;
+    const a = (sesso === 'F') ? -0.241 : -1.2;
+    const scrDivK = creatininemia / k;
+    const minVal = Math.min(scrDivK, 1);
+    const maxVal = Math.max(scrDivK, 1);
+    let eGFR = 142 * Math.pow(minVal, a) * Math.pow(maxVal, -1.2) * Math.pow(0.9938, età);
+    if (sesso === 'F') eGFR *= 1.012;
+    return eGFR;
+  }
+  function stimaEGFRPredetto(età) {
+    return 100 - ((età - 50) * 0.94);
+  }
+  function calcolaRiduzioneEGFR(eGFR, eGFRpredetto) {
+    return (1 - eGFR / eGFRpredetto) * 100;
+  }
+  function calcolaClassificazionePhenotype(drcScore, durataDiabete) {
+    const sogliaAlto = ((durataDiabete + 13) / 10) * 2.00;
+    const sogliaBasso = ((durataDiabete + 13) / 10) * 0.57;
+    if (drcScore > sogliaAlto) {
+      return "HS-DRC (High Susceptibility to DRC)";
+    } else if (drcScore < sogliaBasso) {
+      return "LS-DRC (Low Susceptibility to DRC)";
+    } else {
+      return "MS-DRC (Moderate Susceptibility to DRC)";
+    }
+  }
+  function calcolaDRC() {
+    const età = Number(document.getElementById('age').value);
+    const durataDiabete = Number(document.getElementById('diabetesDuration').value);
+    const sesso = document.getElementById('sex').value;
+    const creatininemia = Number(document.getElementById('creatinin').value);
+    const albuminuria = Number(document.getElementById('uacr').value);
+    const overtCardio = document.getElementById('overtCardio').checked ? 1 : 0;
+    const subclinicalCardio = document.getElementById('subclinicalCardio').checked ? 1 : 0;
+    const overtCerebro = document.getElementById('overtCerebro').checked ? 1 : 0;
+    const subclinicalCerebro = document.getElementById('subclinicalCerebro').checked ? 1 : 0;
+    const overtPeripheral = document.getElementById('overtPeripheral').checked ? 1 : 0;
+    const subclinicalPeripheral = document.getElementById('subclinicalPeripheral').checked ? 1 : 0;
+    const overtRetinopathy = document.getElementById('overtRetinopathy').checked ? 1 : 0;
+    const subclinicalRetinopathy = document.getElementById('subclinicalRetinopathy').checked ? 1 : 0;
+    const overtDPN = document.getElementById('overtDPN').checked ? 1 : 0;
+    const subclinicalDPN = document.getElementById('subclinicalDPN').checked ? 1 : 0;
+    const eGFRCalc = calcolaEGFR(creatininemia, età, sesso);
+    const eGFRPred = stimaEGFRPredetto(età);
+    const riduzioneEGFR = calcolaRiduzioneEGFR(eGFRCalc, eGFRPred);
+    let score = 0;
+    const isReneOvertALB = albuminuria >= 300;
+    const isReneOvertGFR = riduzioneEGFR >= 50;
+    const isReneSubclinicalALB = albuminuria >= 30 && albuminuria < 300;
+    const isReneSubclinicalGFR = riduzioneEGFR >= 25 && riduzioneEGFR < 50;
+    let reneScore = 0;
+    if (isReneOvertALB && isReneOvertGFR) reneScore = 4;
+    else if (isReneSubclinicalALB && isReneSubclinicalGFR) reneScore = 1;
+    else if ((isReneSubclinicalALB && isReneOvertGFR) || (isReneOvertALB && isReneSubclinicalGFR)) reneScore = 4;
+    else if (isReneOvertALB || isReneOvertGFR) reneScore = 3;
+    else if (isReneSubclinicalALB || isReneSubclinicalGFR) reneScore = 1;
+    score += reneScore;
+    function punteggioMalattia(overt, subclinical) {
+      return overt * 3 + subclinical * 1;
+    }
+    score += punteggioMalattia(overtCardio, subclinicalCardio);
+    score += punteggioMalattia(overtCerebro, subclinicalCerebro);
+    score += punteggioMalattia(overtPeripheral, subclinicalPeripheral);
+    score += punteggioMalattia(overtRetinopathy, subclinicalRetinopathy);
+    if (overtDPN) score += 3;
+    else if (subclinicalDPN) score += 1;
+    score = Math.min(Math.max(score, 0), 23);
+    document.getElementById('drcScore').value = score;
+    const phenotype = calcolaClassificazionePhenotype(score, durataDiabete);
+    const phenotypeInput = document.getElementById('phenotype');
+    phenotypeInput.value = phenotype;
+    phenotypeInput.classList.remove('phenotype-hs', 'phenotype-ms', 'phenotype-ls');
+    if (phenotype.startsWith('HS')) {
+      phenotypeInput.classList.add('phenotype-hs');
+    } else if (phenotype.startsWith('MS')) {
+      phenotypeInput.classList.add('phenotype-ms');
+    } else if (phenotype.startsWith('LS')) {
+      phenotypeInput.classList.add('phenotype-ls');
+    }
+  }
+  function azzeraForm() {
+    document.getElementById('drcForm').reset();
+    document.getElementById('drcScore').value = '';
+    document.getElementById('phenotype').value = '';
+    const phenotypeInput = document.getElementById('phenotype');
+    phenotypeInput.classList.remove('phenotype-hs', 'phenotype-ms', 'phenotype-ls');
+  }
+  function stampaReport() {
+    const lastName = document.getElementById('lastName').value.trim();
+    const firstName = document.getElementById('firstName').value.trim();
+    const età = document.getElementById('age').value;
+    const durataDiabete = document.getElementById('diabetesDuration').value;
+    const sesso = document.getElementById('sex').value;
+    const creatininemia = document.getElementById('creatinin').value;
+    const albuminuria = document.getElementById('uacr').value;
+    const overtCardio = document.getElementById('overtCardio').checked ? 'Sì' : 'No';
+    const subclinicalCardio = document.getElementById('subclinicalCardio').checked ? 'Sì' : 'No';
+    const overtCerebro = document.getElementById('overtCerebro').checked ? 'Sì' : 'No';
+    const subclinicalCerebro = document.getElementById('subclinicalCerebro').checked ? 'Sì' : 'No';
+    const overtPeripheral = document.getElementById('overtPeripheral').checked ? 'Sì' : 'No';
+    const subclinicalPeripheral = document.getElementById('subclinicalPeripheral').checked ? 'Sì' : 'No';
+    const overtRetinopathy = document.getElementById('overtRetinopathy').checked ? 'Sì' : 'No';
+    const subclinicalRetinopathy = document.getElementById('subclinicalRetinopathy').checked ? 'Sì' : 'No';
+    const overtDPN = document.getElementById('overtDPN').checked ? 'Sì' : 'No';
+    const subclinicalDPN = document.getElementById('subclinicalDPN').checked ? 'Sì' : 'No';
+    const drcScore = document.getElementById('drcScore').value;
+    const phenotype = document.getElementById('phenotype').value;
+    let report = `
+      <h2>Report DRC Score</h2>
+      <p><strong>Last Name:</strong> ${lastName}</p>
+      <p><strong>First Name:</strong> ${firstName}</p>
+      <p><strong>Età:</strong> ${età}</p>
+      <p><strong>Durata Diabete:</strong> ${durataDiabete}</p>
+      <p><strong>Sesso:</strong> ${sesso}</p>
+      <p><strong>Creatininemia:</strong> ${creatininemia}</p>
+      <p><strong>uACR (mg/g):</strong> ${albuminuria}</p>
+      <p><strong>Overt Cardiac Disease:</strong> ${overtCardio}</p>
+      <p><strong>Subclinical Cardiac Disease:</strong> ${subclinicalCardio}</p>
+      <p><strong>Overt Cerebrovascular Disease:</strong> ${overtCerebro}</p>
+      <p><strong>Subclinical Cerebrovascular Disease:</strong> ${subclinicalCerebro}</p>
+      <p><strong>Overt Peripheral Artery Disease:</strong> ${overtPeripheral}</p>
+      <p><strong>Subclinical Peripheral Artery Disease (ABI < 0.9):</strong> ${subclinicalPeripheral}</p>
+      <p><strong>Overt Diabetic Retinopathy:</strong> ${overtRetinopathy}</p>
+      <p><strong>Subclinical Diabetic Retinopathy:</strong> ${subclinicalRetinopathy}</p>
+      <p><strong>Overt DPN:</strong> ${overtDPN}</p>
+      <p><strong>Subclinical DPN:</strong> ${subclinicalDPN}</p>
+      <p><strong>DRC Score:</strong> ${drcScore}</p>
+      <p><strong>Phenotype:</strong> ${phenotype}</p>
+    `;
+    const printWindow = window.open('', '', 'width=600,height=600');
+    printWindow.document.write('<html><head><title>Report DRC Score</title></head><body>');
+    printWindow.document.write(report);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+  }
+</script>
+</body>
+</html>
