@@ -1,4 +1,4 @@
-  export default async (req, context) => {
+ export default async (req, context) => {
   try {
     const calcoli = (await context.storage.get({ key: 'calcoli' })) || 0;
     const nuovo = calcoli + 1;
