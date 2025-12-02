@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contatori DRC Score</title>
+  <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --font-main: 'Berkeley Mono', monospace;
+      --main-green: #42544B;
+      --panna: #FCFAF0;
+    }
+    body { 
+      font-family: var(--font-main);
+      background: var(--panna);
+      color: var(--main-green);
+      margin: 0;
+      padding: 2em;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    h1 { text-align: center; font-weight: 700; letter-spacing: 0.02em; }
+    .contatore { 
+      background: white; 
+      padding: 2em; 
+      margin: 1em 0; 
+      border-radius: 10px; 
+      border: 2px solid #b1bfa7;
+      text-align: center;
+      font-size: 1.5em;
+      font-weight: 700;
+    }
+    .icona { font-size: 2em; display: block; }
+    .link { text-align: center; margin: 2em 0; }
+    a { color: var(--main-green); text-decoration: none; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <h1>📊 Statistiche DRC Score</h1>
+  
+  <div class="contatore" id="visite">
+    <span class="icona">👁️</span>
+    Caricando visite...
+  </div>
+  
+  <div class="contatore" id="calcoli">
+    <span class="icona">⚙️</span>
+    Caricando calcoli...
+  </div>
+  
+  <div class="contatore" id="stampe">
+    <span class="icona">🖨️</span>
+    Caricando stampe...
+  </div>
+  
+  <div class="link">
+    <a href="index-version-1.1-with-readme.html">← Torna al Calcolatore</a>
+  </div>
+
+  <script>
+    async function aggiornaContatori() {
+      try {
+        const [v, c, s] = await Promise.all([
+          fetch('/.netlify/functions/incrementa-visite').then(r=>r.json()),
+          fetch('/.netlify/functions/incrementa-calcolo').then(r=>r.json()),
+          fetch('/.netlify/functions/incrementa-stampa').then(r=>r.json())
+        ]);
+        document.getElementById('visite').innerHTML = 
+          `<span class="icona">👁️</span>${v.visite} visite totali`;
+        document.getElementById('calcoli').innerHTML = 
+          `<span class="icona">⚙️</span>${c.calcoli} calcoli totali`;
+        document.getElementById('stampe').innerHTML = 
+          `<span class="icona">🖨️</span>${s.stampe} stampe totali`;
+      } catch(e) {
+        document.querySelectorAll('.contatore').forEach(el => 
+          el.innerHTML = '<span class="icona">⚠️</span>Errore caricamento'
+        );
+      }
+    }
+    aggiornaContatori();
+    setInterval(aggiornaContatori, 10000); // Refresh ogni 10s
+  </script>
+</body>
+</html>
