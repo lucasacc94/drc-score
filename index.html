@@ -425,8 +425,8 @@ button:hover { background-color: #27322c; }
       <p><strong>Diabets Duration:</strong> ${durataDiabete}</p>
       <p><strong>Sex:</strong> ${sesso}</p>
       <p><strong>Creatinine:</strong> ${creatininemia} mg/dl</p>
-      <p><strong>eGFR:</strong> ${eGFRCalc} ml/min/1.73sqm</p>
-      <p><strong>eGFR Reduction:</strong> ${riduzioneEGFR.toFixed(1)} %</p>
+      <p><strong>eGFR:</strong> ${eGFRCalc.toFixed(2)} ml/min/1.73sqm</p>
+      <p><strong>eGFR Reduction:</strong> ${riduzioneEGFR.toFixed(2)} %</p>
       <p><strong>uACR :</strong> ${albuminuria} mg/g</p>
       <p><strong>Overt Cardiac Disease:</strong> ${overtCardio}</p>
       <p><strong>Subclinical Cardiac Disease:</strong> ${subclinicalCardio}</p>
@@ -480,6 +480,7 @@ document.querySelector('button[type="submit"]').addEventListener('click', (e) =>
 </body>
 
 </html>
+
 
 
 
