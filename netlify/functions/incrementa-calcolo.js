@@ -1,4 +1,3 @@
-netlify/functions/incrementa-calcolo.js
   export default async (req, context) => {
   try {
     const calcoli = (await context.storage.get({ key: 'calcoli' })) || 0;
