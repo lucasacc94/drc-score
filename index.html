@@ -178,6 +178,35 @@ button:hover { background-color: #27322c; }
   background-color: #198754;
   color: #fff;
 }
+.info-descrittiva {
+  margin: 3em auto 2em auto;
+  max-width: 1400px;
+  width: 95%;
+  padding: 1.2em 1.5em;
+  background: rgba(255,255,255,0.6);
+  border-radius: 10px;
+  border: 1px solid #e0e0d8;
+  font-family: var(--font-main), monospace;
+  color: var(--main-green);
+  font-size: 0.88em;
+  line-height: 1.5;
+  box-shadow: 0 2px 8px rgba(66,84,75,0.08);
+  text-align: justify;
+}
+.info-descrittiva p {
+  margin: 0.3em 0;
+}
+.info-descrittiva b {
+  font-weight: 700;
+}
+.original-reference {
+  margin-top: 1.5em;
+  font-weight: 700;
+  font-size: 0.9em;
+  color: var(--main-green);
+  font-family: var(--font-main), monospace;
+  text-align: right;
+}    
   </style>
 </head>
 <body>
@@ -416,7 +445,24 @@ button:hover { background-color: #27322c; }
     printWindow.close();
   }
 </script>
+<div class="info-descrittiva">
+  <h3 style="text-align: center; margin-bottom: 1em; font-size: 1.1em; color: var(--main-green);">Legend</h3>
+  <p><b>Overt Cardiac Disease:</b> acute coronary syndrome (STEMI, NSTEMI, unstable angina), history of surgical and/or percutaneous coronary revascularization, or evidence of silent myocardial infarction at EKG, echocardiography, myocardial scintigraphy/SPECT or cardiac MRI.</p>
+  <p><b>Subclinical Cardiac Disease:</b> in patients at veri high CV risk (SCORE2-D>20%) evidence of at least one plaque ≥50% at coronary angio-CT/coro-CT, a CAC score >100 Agaston, or a positive stress test (echo, ECG, or nuclear imaging stress test)</p>
+  <p><b>Overt Cerebrovascular Disease:</b> hystory of ischemic stroke or carotid revascularization</p>
+  <p><b>Subclinical Cerebrovascular Disease:</b> evidence of at least one carotid plaque ≥ 2 mm and/or stenosis ≥ 30% detected by echocolordoppler</p>
+  <p><b>Overt Peripheral Artery Disease:</b> any amputation due to atherosclerotic-related ischemia or any peripheral revascularization, either previously performed or planned</p>
+  <p><b>Subclinical Peripheral Artery Disease:</b> evidence of left and/or right ABI <0.9</p>
+ <p><b>Overt Diabetic Kidney Disease:</b> evidence of ≥50% e-GFR reduction with respect to the predicted-for-age eGFR (p-eGFR= 100-(age-50)*0.94) and/or macroalbuminuria (urinary albumin to creatinine ratio, ACR, ≥300 mg/g)</p>
+  <p><b>Subclinical Diabetic Kidney Disease:</b> evidence of 25-49% e-GFR reduction with respect to the p-eGFR and/or microalbuminuria, defined as ACR 30-299 mg/g</p>
+  <p><b>Overt Diabetic Retinopathy:</b> evidence of any type of proliferative retinopathy/high-risk non-proliferative retinopathy, or any previous treatment for diabetic retinopathy</p>
+  <p><b>Subclinical Diabetic Retinopathy:</b> low/middle-risk non-proliferative retinopathy or background retinopathy</p>
+  <p><b>Overt DPN:</b> MNSI >4</p>
+  <p><b>Subclinical DPN:</b> MNSI 2.5–4</p>
+<p class="original-reference"><b>Original Reference:</b> ...</p>
+</div>
 </body>
 
 </html>
+
 
