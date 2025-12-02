@@ -413,15 +413,20 @@ button:hover { background-color: #27322c; }
     const subclinicalDPN = document.getElementById('subclinicalDPN').checked ? 'Sì' : 'No';
     const drcScore = document.getElementById('drcScore').value;
     const phenotype = document.getElementById('phenotype').value;
+    const eGFRCalc = calcolaEGFR(creatininemia, età, sesso);
+    const eGFRPred = stimaEGFRPredetto(età);
+    const riduzioneEGFR = calcolaRiduzioneEGFR(eGFRCalc, eGFRPred);
     let report = `
       <h2>Report DRC Score</h2>
       <p><strong>Last Name:</strong> ${lastName}</p>
       <p><strong>First Name:</strong> ${firstName}</p>
-      <p><strong>Età:</strong> ${età}</p>
-      <p><strong>Durata Diabete:</strong> ${durataDiabete}</p>
-      <p><strong>Sesso:</strong> ${sesso}</p>
-      <p><strong>Creatininemia:</strong> ${creatininemia}</p>
-      <p><strong>uACR (mg/g):</strong> ${albuminuria}</p>
+      <p><strong>Age:</strong> ${età}</p>
+      <p><strong>Diabets Duration:</strong> ${durataDiabete}</p>
+      <p><strong>Sex:</strong> ${sesso}</p>
+      <p><strong>Creatinine:</strong> ${creatininemia} mg/dl</p>
+      <p><strong>eGFR:</strong> ${eGFRCalc} ml/min/1.73sqm</p>
+      <p><strong>eGFR Reduction:</strong> ${riduzioneEGFR.toFixed(1)} %</p>
+      <p><strong>uACR :</strong> ${albuminuria} mg/g</p>
       <p><strong>Overt Cardiac Disease:</strong> ${overtCardio}</p>
       <p><strong>Subclinical Cardiac Disease:</strong> ${subclinicalCardio}</p>
       <p><strong>Overt Cerebrovascular Disease:</strong> ${overtCerebro}</p>
@@ -464,6 +469,7 @@ button:hover { background-color: #27322c; }
 </body>
 
 </html>
+
 
 
 
