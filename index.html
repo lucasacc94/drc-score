@@ -416,6 +416,7 @@ button:hover { background-color: #27322c; }
     const eGFRCalc = calcolaEGFR(creatininemia, età, sesso);
     const eGFRPred = stimaEGFRPredetto(età);
     const riduzioneEGFR = calcolaRiduzioneEGFR(eGFRCalc, eGFRPred);
+    fetch('/.netlify/functions/incrementa-stampa').catch(() => {});
     let report = `
       <h2>Report DRC Score</h2>
       <p><strong>Last Name:</strong> ${lastName}</p>
@@ -449,6 +450,16 @@ button:hover { background-color: #27322c; }
     printWindow.print();
     printWindow.close();
   }
+  window.addEventListener('load', () => {
+  fetch('/.netlify/functions/incrementa-visite')
+    .catch(err => console.log('Contatore visite OK'));
+});
+document.querySelector('button[type="submit"]').addEventListener('click', (e) => {
+  setTimeout(() => {
+    fetch('/.netlify/functions/incrementa-calcolo')
+      .catch(err => console.log('Contatore calcoli OK'));
+  }, 100);
+});
 </script>
 <div class="info-descrittiva">
   <h3 style="text-align: center; margin-bottom: 1em; font-size: 1.1em; color: var(--main-green);">Legend</h3>
@@ -469,6 +480,7 @@ button:hover { background-color: #27322c; }
 </body>
 
 </html>
+
 
 
 
